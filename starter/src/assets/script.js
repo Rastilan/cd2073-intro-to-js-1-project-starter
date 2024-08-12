@@ -25,70 +25,71 @@ let products = [
 let cart = [];
 
 function addProductToCart(productId) {
+
   let product = products.find((product) => product.productId === productId); // find product info in products array. 
   if(product){
     if (product.quantity === 0) {
       cart.push(product); // adds product if it doesn't currently exist in the cart
     }
       product.quantity++; //included here to increase quanitity of product found or not
-  } else {
-    console.log(`Error: Product with ID ${product} is not a valid product`) //Product added to cart is not found in the products array
-  }
+  }  
 }
 
 function increaseQuantity(productId){
   let product = products.find((product) => product.productId === productId);
   if(product){
     product.quantity++;
-  } else {
-    console.log(`Error: Product with ID ${product} is not a valid product`) //Product added to cart is not found in the products array
-  }
+  }  
 }
 
-function decreaseQuantity(productId){
-  let product = products.find((product) => product.productId === productId);
-  if(product){
-    if(product.quantity === 1){
-      cart = cart.filter((product) => product.productId !== productId)
+function decreaseQuantity(productId) {
+  let cartItem = cart.find((item) => item.productId === productId);
+  if (cartItem) {
+    if (cartItem.quantity > 1) {
+      cartItem.quantity--;
     } else {
-      product.quantity--;
+      removeProductFromCart(productId);
     }
-  } else {
-    console.log(`Error: Product with ID ${product} is not a valid product`) //Product added to cart is not found in the products array
   }
-
 }
 
 function removeProductFromCart(productId){
+  cart = cart.filter(item => item.productId !== productId);
   let product = products.find((product) => product.productId === productId);
-  if(product){
+  if(product) {
     product.quantity = 0;
-    cart = cart.filter((product) => product.productId !== productId);
-  } else {
-    console.log(`Error: Product with ID ${product} is not a valid product`) //Product added to cart is not found in the products array
+  }
+   
+}
+
+
+function cartTotal() {
+  let total = 0;
+  if(cart.length !== 0){
+    cart.forEach(product => {
+      total += (product.price * product.quantity);
+    });
+    return total;
+  }
+  else {
+    return 0;
   }
 }
 
-/* Create a function named removeProductFromCart that takes in the productId as an argument
-  - removeProductFromCart should get the correct product based on the productId
-  - removeProductFromCart should update the product quantity to 0
-  - removeProductFromCart should remove the product from the cart
-*/
+function emptyCart() {
+  cart.forEach(product => {
+    product.quantity = 0;
+  });
+  cart = [];
+}
 
-/* Create a function named cartTotal that has no parameters
-  - cartTotal should iterate through the cart to get the total cost of all products
-  - cartTotal should return the total cost of the products in the cart
-  Hint: price and quantity can be used to determine total cost
-*/
+function pay(amount){
+  if (isNaN(amount) || amount < 0) {
+    return "Please correct cash recieved, amount is either less than 0 or not a number ";
+  }
+ return amount - cartTotal();
+}
 
-/* Create a function called emptyCart that empties the products from the cart */
-
-/* Create a function named pay that takes in an amount as an argument
-  - amount is the money paid by customer
-  - pay will return a negative number if there is a remaining balance
-  - pay will return a positive number if money should be returned to customer
-  Hint: cartTotal function gives us cost of all the products in the cart  
-*/
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 
