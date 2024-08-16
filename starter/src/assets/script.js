@@ -1,4 +1,4 @@
-let products = [
+const products = [
   {
     name: "Cherry",
     price: 3,
@@ -22,64 +22,57 @@ let products = [
   }
 ];
 
-let cart = [];
+const cart = [];
+
+function findProductById(productId) {
+  return products.find((product) => product.productId === productId);
+}
 
 function addProductToCart(productId) {
-
-  let product = products.find((product) => product.productId === productId); // find product info in products array. 
-  if(product){
-    if (product.quantity === 0) {
-      cart.push(product); // adds product if it doesn't currently exist in the cart
-    }
-      product.quantity++; //included here to increase quanitity of product found or not
-  }  
+  let product = findProductById(productId);
+  ++product.quantity;
+  if(!cart.includes(product)){
+    cart.push(product);
+  } 
+      
 }
 
 function increaseQuantity(productId){
-  let product = products.find((product) => product.productId === productId);
-  if(product){
-    product.quantity++;
-  }  
+  let product = findProductById(productId);
+  ++product.quantity;
 }
 
 function decreaseQuantity(productId) {
-  let cartItem = cart.find((item) => item.productId === productId);
-  if (cartItem) {
-    if (cartItem.quantity > 1) {
-      cartItem.quantity--;
-    } else {
-      removeProductFromCart(productId);
-    }
-  }
+  let product = findProductById(productId);
+  --product.quantity;
+  if (product.quantity === 0) {
+    removeProductFromCart(productId);
+  } 
+  
 }
 
-function removeProductFromCart(productId){
-  cart = cart.filter(item => item.productId !== productId);
-  let product = products.find((product) => product.productId === productId);
-  if(product) {
-    product.quantity = 0;
+function removeProductFromCart(productId) {
+  const productIndex = cart.findIndex(product => product.productId === productId)
+  if(productIndex !== -1) {
+    cart[productIndex].quantity = 0;
+    cart.splice(productIndex, 1);
   }
-   
-}
 
+  return cart;
+  
+}
 
 function cartTotal() {
   let total = 0;
-  if(cart.length !== 0){
+ 
     cart.forEach(product => {
       total += (product.price * product.quantity);
     });
     return total;
-  }
-  else {
-    return 0;
-  }
+  
 }
 
 function emptyCart() {
-  cart.forEach(product => {
-    product.quantity = 0;
-  });
   cart = [];
 }
 
@@ -88,7 +81,9 @@ function pay(amount){
     return "Please correct cash recieved, amount is either less than 0 or not a number ";
   }
  return amount - cartTotal();
+ 
 }
+
 
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
