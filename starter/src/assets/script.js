@@ -23,7 +23,7 @@ const products = [
   }
 ];
 
-const cart = [];
+let cart = [];
 let balance = 0;
 
 // Finds the product by the product ID. 
@@ -90,10 +90,21 @@ function pay(amount){
     return "Please correct cash recieved, amount is either less than 0 or not a number ";
   }
   else {
-    balance += amount;
-    let newBalance = balance - cartTotal();
-    newBalance = Math.round( newBalance * 1e2 ) / 1e2;
-    return newBalance;
+    if(amount < balance && balance < 0){ // if amount is less than balance, pay amount and ask for remaining
+      balance = balance + amount;
+      balance = Math.round( balance * 1e2 ) / 1e2;
+      return balance;
+    } 
+    else if (amount >= balance && balance < 0){ // if amount is greater than or equal to balance. pay amount and return remaining. If possible update display on site.
+        balance = balance + amount;
+        balance = Math.round( balance * 1e2 ) / 1e2;
+        return balance;
+
+    }
+    else {
+      return amount; // if money is given without a balance, return the money.
+    }
+    
   }
  
 }
