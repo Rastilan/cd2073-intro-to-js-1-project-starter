@@ -92,9 +92,9 @@ function pay(amount){
   else {
     balance += amount;
     let newBalance = balance - cartTotal();
+    newBalance = Math.round( newBalance * 1e2 ) / 1e2;
     return newBalance;
   }
-return balance;
  
 }
 
