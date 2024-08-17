@@ -1,3 +1,4 @@
+// Complete list of products in an array. 
 const products = [
   {
     name: "Cherry",
@@ -23,11 +24,14 @@ const products = [
 ];
 
 const cart = [];
+let balance = 0;
 
+// Finds the product by the product ID. C
 function findProductById(productId) {
   return products.find((product) => product.productId === productId);
 }
 
+// increases the quantity of the product by one and adds it to the cart if it doesn't already exist in the cart.
 function addProductToCart(productId) {
   let product = findProductById(productId);
   ++product.quantity;
@@ -37,11 +41,13 @@ function addProductToCart(productId) {
       
 }
 
+// Increases the quantity of the product by one.
 function increaseQuantity(productId){
   let product = findProductById(productId);
   ++product.quantity;
 }
 
+// Decreases the quantity of the product by one. If the product quantity hits 0, it removes it from the cart.
 function decreaseQuantity(productId) {
   let product = findProductById(productId);
   --product.quantity;
@@ -51,6 +57,7 @@ function decreaseQuantity(productId) {
   
 }
 
+// Remove a product from cart and sets its quantity to 0.
 function removeProductFromCart(productId) {
   const productIndex = cart.findIndex(product => product.productId === productId)
   if(productIndex !== -1) {
@@ -62,25 +69,32 @@ function removeProductFromCart(productId) {
   
 }
 
+// finds the total of all products price times quantity. Then sets that value as a negative into the balance.
 function cartTotal() {
   let total = 0;
- 
-    cart.forEach(product => {
-      total += (product.price * product.quantity);
-    });
-    return total;
-  
+  cart.forEach(product => {
+    total += (product.price * product.quantity);
+  });
+  balance = -total; // Set balance to the negative of the total
+  return total;
 }
 
+// Empties the cart
 function emptyCart() {
   cart = [];
 }
 
+// Pays a positive amount to a negative balance and sets a new balance.
 function pay(amount){
-  if (isNaN(amount) || amount < 0) {
+  if (isNaN(amount) || amount <= 0) { // Checks for negative or zero. 
     return "Please correct cash recieved, amount is either less than 0 or not a number ";
   }
- return amount - cartTotal();
+  else {
+    balance += amount;
+    let newBalance = balance - cartTotal();
+    return newBalance;
+  }
+return balance;
  
 }
 
