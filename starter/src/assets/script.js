@@ -26,7 +26,7 @@ const products = [
 const cart = [];
 let balance = 0;
 
-// Finds the product by the product ID. C
+// Finds the product by the product ID. 
 function findProductById(productId) {
   return products.find((product) => product.productId === productId);
 }
